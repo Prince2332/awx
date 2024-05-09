@@ -1,6 +1,7 @@
 ---
-- name: Ping localhost
-  hosts: localhost
+
+- hosts: all
+  gather_facts: false
   tasks:
-    - name: Ping localhost
-      ping:
+    - ping:
+    
