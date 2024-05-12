@@ -5,6 +5,4 @@
   tasks:
     - ping:
     - debug:
-        msg: "The hostname is {{ hostname }}"
-      vars:
-        hostname: "{{ hostname }}"
+        msg: "The hostname is "
