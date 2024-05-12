@@ -1,8 +1,8 @@
 ---
 
 - hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
     - ping:
     - debug:
-        msg: "The hostname is {{ extra_vars.swap_file_size_mb }}"
+        msg: "The hostname is "
