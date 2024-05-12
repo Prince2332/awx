@@ -5,4 +5,4 @@
   tasks:
     - ping:
     - debug:
-        msg: "The hostname is "
+        msg: "The hostname is {{ swap_file_size_mb }}"
