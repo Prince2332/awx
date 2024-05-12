@@ -4,5 +4,6 @@
   gather_facts: true
   tasks:
     - ping:
+
     - debug:
-        msg: "The hostname is "
+        msg: "The hostname is {{ ansible_hostname }} and swap_file_size_mb is {{ hostvars[inventory_hostname].swap_file_size_mb }} and swap_file_state is {{ hostvars[inventory_hostname].swap_file_state }}"
