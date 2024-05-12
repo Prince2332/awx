@@ -4,4 +4,5 @@
   gather_facts: false
   tasks:
     - ping:
-    
+    - debug:
+        msg: "The hostname is {{ hostname }}"
