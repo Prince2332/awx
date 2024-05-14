@@ -1,4 +1,5 @@
 # If you want to use Username and Password to be authenticated by Zabbix Server
+task:
 - name: Set API token
   ansible.builtin.set_fact:
     ansible_zabbix_auth_key: 2f6047daa57d3331a14bcdb5527a41a91635bafcc799bbc4aecde38f2a5db8f1
