@@ -1,0 +1,23 @@
+---
+- name: Gather facts from ServiceNow
+  hosts: localhost
+  gather_facts: no
+  vars:
+    servicenow_instance: "https://dev250175.service-now.com"
+    servicenow_username: "admin"
+    servicenow_password: "3NbpKcM8u+O-"
+    servicenow_table: "incident"  # Change this to the table you want to query
+
+  tasks:
+    - name: Get incident records from ServiceNow
+      servicenow.itsm.now:
+        instance: "{{ servicenow_instance }}"
+        username: "{{ servicenow_username }}"
+        password: "{{ servicenow_password }}"
+        table: "{{ servicenow_table }}"
+        query: "active=true"  # Modify this query as needed
+      register: result
+
+    - name: Display ServiceNow records
+      debug:
+        var: result.records
