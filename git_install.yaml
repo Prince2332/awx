@@ -1,0 +1,10 @@
+---
+- name: Install Git on all hosts using dnf
+  hosts: all
+  become: yes  # Ensure that the tasks are run with root privileges
+
+  tasks:
+    - name: Ensure git is installed
+      dnf:
+        name: git
+        state: present
