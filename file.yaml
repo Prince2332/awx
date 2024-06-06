@@ -1,0 +1,11 @@
+---
+- name: Create a file named test.txt
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create test.txt in the specified directory
+      file:
+        path: "{{ target_directory }}/test.txt"
+        state: touch
+      vars:
+        target_directory: /tmp
