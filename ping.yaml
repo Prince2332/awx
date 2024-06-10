@@ -8,4 +8,4 @@
 
     - name: Print hostname
       debug:
-        msg: "Extra Vars change from test: {{ data.extra_vars }}"
+        msg: "Extra Vars change from test: {{ extra_vars }}"
