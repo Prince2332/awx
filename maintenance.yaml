@@ -15,7 +15,7 @@
     ansible_zabbix_url_path: "http://172.29.57.115/zabbix"  # If Zabbix WebUI runs on non-default (zabbix) path ,e.g. http://<FQDN>/zabbixeu
     ansible_host: http://172.29.57.115
   community.zabbix.zabbix_maintenance:
-    name: {{Maintenance_name}}
-    host_name: {{Hostname}}
+    name: maintenance
+    host_name: U0102ITIV088LVS
     state: present
     minutes: 90
