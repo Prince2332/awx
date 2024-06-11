@@ -1,4 +1,3 @@
----
 # If you want to use Username and Password to be authenticated by Zabbix Server
 task:
 - name: Set API token
