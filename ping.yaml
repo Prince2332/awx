@@ -1,8 +1,11 @@
 ---
-
 - hosts: all
   gather_facts: false
   tasks:
-    - debug:
-        msg: "Extra Vars change from test :"
-      
+    - name: Print all variables
+      debug:
+        var: vars
+
+    - name: Print hostname
+      debug:
+        msg: "Extra Vars change from test: {{ extra_vars }}"
