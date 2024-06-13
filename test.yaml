@@ -3,6 +3,4 @@
   gather_facts: false
   tasks:
     - debug:
-        msg: "Extra Vars change from test 1 : {{ extra_vars }}"
-      vars:
-        extra_vars: "{{ extra_vars }}"
+        msg: "Extra Vars change from test 1 :"
