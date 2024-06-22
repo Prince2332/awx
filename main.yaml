@@ -1,18 +1,27 @@
----
 - name: Create a maintenance window for a Zabbix host
   hosts: localhost
   connection: local
+  gather_facts: true  # Ensure facts are gathered
   vars:
     zabbix_api_url: "http://172.29.57.115/zabbix/api_jsonrpc.php"
     zabbix_user: "Admin"
     zabbix_password: "zabbix"
-    host_name: "{{ vars.Hostname }}"
-    maintenance_name: "{{ vars.Maintenance_Name + (ansible_date_time.epoch | int) }}"
-    maintenance_description: "{{ vars.Reason_Justification }}"
-    maintenance_time_start: "{{ (vars.Active_Since | int) + 60 }}"  # Start time, 60 seconds from now
-    maintenance_duration: {{ vars.Period }}  # Duration in seconds (1 hour)
+    host_name: "{{ Hostname }}"
+    maintenance_name: "{{ Maintenance_Name + (ansible_date_time.epoch | int) }}"
+    maintenance_description: "{{ Reason_Justification }}"
+    maintenance_time_start: "{{ (Active_Since | int) + 60 }}"  # Start time, 60 seconds from now
+    maintenance_duration: "{{ Period }}"  # Duration in seconds
 
   tasks:
+    - name: Print variables for debugging
+      debug:
+        msg:
+          hostname: "{{ host_name }}"
+          maintenance_name: "{{ maintenance_name }}"
+          maintenance_description: "{{ maintenance_description }}"
+          maintenance_time_start: "{{ maintenance_time_start }}"
+          maintenance_duration: "{{ maintenance_duration }}"
+
     - name: Get Zabbix auth token
       uri:
         url: "{{ zabbix_api_url }}"
@@ -87,15 +96,15 @@
           method: "maintenance.create"
           params:
             name: "{{ maintenance_name }}"
-            active_since: "{{ maintenance_time_start }}"
-            active_till: "{{ maintenance_time_start | int + maintenance_duration }}"
+            active_since: "{{ maintenance_time_start | int }}"
+            active_till: "{{ (maintenance_time_start | int) + (maintenance_duration | int) }}"
             description: "{{ maintenance_description }}"
             hostids:
               - "{{ host_id }}"
             timeperiods:
               - timeperiod_type: 0  # one-time maintenance
-                start_date: "{{ maintenance_time_start }}"
-                period: "{{ maintenance_duration }}"
+                start_date: "{{ maintenance_time_start | int }}"
+                period: "{{ maintenance_duration | int }}"
           auth: "{{ zabbix_auth_token }}"
           id: 3
         return_content: yes
