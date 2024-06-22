@@ -7,10 +7,10 @@
     zabbix_user: "Admin"
     zabbix_password: "zabbix"
     host_name: "{{ Hostname }}"
-    maintenance_name: "Maintenance Window"
-    maintenance_description: "Scheduled maintenance"
-    maintenance_time_start: "{{ (ansible_date_time.epoch | int) + 60 }}"  # Start time, 60 seconds from now
-    maintenance_duration: 3600  # Duration in seconds (1 hour)
+    maintenance_name: "{{ vars.Maintenance_Name + (ansible_date_time.epoch | int) }}"
+    maintenance_description: "{{ vars.Reason_Justification }}"
+    maintenance_time_start: "{{ (vars.Active_Since | int) + 60 }}"  # Start time, 60 seconds from now
+    maintenance_duration: {{ vars.Period }}  # Duration in seconds (1 hour)
 
   tasks:
     - name: Get Zabbix auth token
