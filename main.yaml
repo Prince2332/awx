@@ -24,7 +24,7 @@
           jsonrpc: "2.0"
           method: "user.login"
           params:
-            user: "{{ zabbix_user }}"
+            username: "{{ zabbix_user }}"
             password: "{{ zabbix_password }}"
           id: 1
         return_content: yes
