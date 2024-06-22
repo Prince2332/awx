@@ -66,11 +66,13 @@
 
     - name: Filter host by name case-insensitively
       set_fact:
-        host_id: "{{ (all_hosts_response.json.result | selectattr('name', 'search', host_name | lower) | list | first).hostid | default('') }}"
+        host_id: "{{ query_result | default('') }}"
+      vars:
+        query_result: "{{ all_hosts_response.json.result | selectattr('name', 'search', host_name | lower) | list | first }}"
 
-    - name: Fail if host ID is not set
+    - name: Fail if host ID is not found
       fail:
-        msg: "Failed to get host ID."
+        msg: "Failed to find host ID for '{{ host_name }}'."
       when: host_id == ''
 
     - name: Create maintenance window
