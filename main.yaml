@@ -56,7 +56,7 @@
           params:
             output: ["hostid"]
             filter:
-              host: ["{{ host_name }}"]
+              name: ["{{ host_name }}"]
           auth: "{{ zabbix_auth_token }}"
           id: 2
         return_content: yes
