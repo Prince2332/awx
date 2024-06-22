@@ -30,9 +30,18 @@
         return_content: yes
       register: auth_response
 
+    - name: Debug auth response
+      debug:
+        var: auth_response
+
     - name: Set Zabbix auth token
       set_fact:
-        zabbix_auth_token: "{{ auth_response.json.result }}"
+        zabbix_auth_token: "{{ auth_response.json.result | default('') }}"
+
+    - name: Fail if auth token is not set
+      fail:
+        msg: "Failed to get Zabbix auth token."
+      when: zabbix_auth_token == ''
 
     - name: Get host ID by host name
       uri:
@@ -41,7 +50,6 @@
         body_format: json
         headers:
           Content-Type: "application/json"
-          Authorization: "Bearer {{ zabbix_auth_token }}"
         body:
           jsonrpc: "2.0"
           method: "host.get"
@@ -54,9 +62,18 @@
         return_content: yes
       register: host_response
 
+    - name: Debug host response
+      debug:
+        var: host_response
+
     - name: Set host ID
       set_fact:
-        host_id: "{{ host_response.json.result[0].hostid }}"
+        host_id: "{{ host_response.json.result[0].hostid | default('') }}"
+
+    - name: Fail if host ID is not set
+      fail:
+        msg: "Failed to get host ID."
+      when: host_id == ''
 
     - name: Create maintenance window
       uri:
@@ -65,7 +82,6 @@
         body_format: json
         headers:
           Content-Type: "application/json"
-          Authorization: "Bearer {{ zabbix_auth_token }}"
         body:
           jsonrpc: "2.0"
           method: "maintenance.create"
@@ -88,5 +104,3 @@
     - name: Output maintenance creation response
       debug:
         var: maintenance_response
-
-        
