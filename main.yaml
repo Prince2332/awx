@@ -68,7 +68,7 @@
       set_fact:
         host_id: "{{ query_result | default('') }}"
       vars:
-        query_result: "{{ all_hosts_response.json.result | selectattr('name', 'search', host_name | lower) | list | first }}"
+        query_result: "{{ all_hosts_response.json.result | selectattr('name', 'search', host_name) | list | first }}"
 
     - name: Fail if host ID is not found
       fail:
