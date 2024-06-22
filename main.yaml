@@ -1,21 +1,89 @@
-# If you want to use Username and Password to be authenticated by Zabbix Server
-task:
-- name: Set API token
-  ansible.builtin.set_fact:
-    ansible_zabbix_auth_key: 4f92cee14a57fc618ba782f332a715116b0072bf8e699069fcd0d30853037805
-
-- name: Create a named maintenance window for host www1 for 90 minutes
-  # set task level variables as we change ansible_connection plugin here
+---
+- name: Create a maintenance window for a Zabbix host
+  hosts: localhost
   vars:
-    ansible_network_os: community.zabbix.zabbix
-    ansible_connection: httpapi
-    ansible_httpapi_port: 443
-    ansible_httpapi_use_ssl: true
-    ansible_httpapi_validate_certs: false
-    ansible_zabbix_url_path: "http://172.29.57.115/zabbix"  # If Zabbix WebUI runs on non-default (zabbix) path ,e.g. http://<FQDN>/zabbixeu
-    ansible_host: http://172.29.57.115
-  community.zabbix.zabbix_maintenance:
-    name: {{Maintenance_name}}
-    host_name: {{Hostname}}
-    state: present
-    minutes: 90
+    zabbix_api_url: "http://your_zabbix_server/api_jsonrpc.php"
+    zabbix_user: "your_zabbix_user"
+    zabbix_password: "your_zabbix_password"
+    host_name: "your_host_name"
+    maintenance_name: "Maintenance Window"
+    maintenance_description: "Scheduled maintenance"
+    maintenance_time_start: "{{ (ansible_date_time.epoch | int) + 60 }}"  # Start time, 60 seconds from now
+    maintenance_duration: 3600  # Duration in seconds (1 hour)
+
+  tasks:
+    - name: Get Zabbix auth token
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          jsonrpc: "2.0"
+          method: "user.login"
+          params:
+            user: "{{ zabbix_user }}"
+            password: "{{ zabbix_password }}"
+          id: 1
+        return_content: yes
+      register: auth_response
+
+    - name: Set Zabbix auth token
+      set_fact:
+        zabbix_auth_token: "{{ auth_response.json.result }}"
+
+    - name: Get host ID by host name
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ zabbix_auth_token }}"
+        body:
+          jsonrpc: "2.0"
+          method: "host.get"
+          params:
+            output: ["hostid"]
+            filter:
+              host: ["{{ host_name }}"]
+          auth: "{{ zabbix_auth_token }}"
+          id: 2
+        return_content: yes
+      register: host_response
+
+    - name: Set host ID
+      set_fact:
+        host_id: "{{ host_response.json.result[0].hostid }}"
+
+    - name: Create maintenance window
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ zabbix_auth_token }}"
+        body:
+          jsonrpc: "2.0"
+          method: "maintenance.create"
+          params:
+            name: "{{ maintenance_name }}"
+            active_since: "{{ maintenance_time_start }}"
+            active_till: "{{ maintenance_time_start | int + maintenance_duration }}"
+            description: "{{ maintenance_description }}"
+            hostids:
+              - "{{ host_id }}"
+            timeperiods:
+              - timeperiod_type: 0  # one-time maintenance
+                start_date: "{{ maintenance_time_start }}"
+                period: "{{ maintenance_duration }}"
+          auth: "{{ zabbix_auth_token }}"
+          id: 3
+        return_content: yes
+      register: maintenance_response
+
+    - name: Output maintenance creation response
+      debug:
+        var: maintenance_response
