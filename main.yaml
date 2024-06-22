@@ -1,6 +1,7 @@
 ---
 - name: Create a maintenance window for a Zabbix host
-  hosts: Linux_Servers
+  hosts: localhost
+  connection: local
   vars:
     zabbix_api_url: "http://172.29.57.115/api_jsonrpc.php"
     zabbix_user: "Admin"
