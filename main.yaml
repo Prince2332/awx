@@ -1,13 +1,13 @@
 - name: Create a maintenance window for a Zabbix host
   hosts: localhost
   connection: local
-  gather_facts: true
+  gather_facts: false
   vars:
     zabbix_api_url: "http://172.29.57.115/zabbix/api_jsonrpc.php"
     zabbix_user: "Admin"
     zabbix_password: "zabbix"
     host_name: "{{ Hostname }}"
-    maintenance_name: "{{ Maintenance_Name + (ansible_date_time.epoch) }}"
+    maintenance_name: "{{ Maintenance_Name + ' ' + (ansible_date_time.epoch) }}"
     maintenance_description: "{{ Reason_Justification }}"
     maintenance_time_start: "{{ (Active_Since | int) + 60 }}"  # Start time, 60 seconds from now
     maintenance_duration: "{{ Period }}"  # Duration in seconds
