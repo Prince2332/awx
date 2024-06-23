@@ -1,18 +1,27 @@
 - name: Create a maintenance window for a Zabbix host
   hosts: localhost
   connection: local
-  gather_facts: true
+  gather_facts: true  # Ensure facts are gathered
   vars:
     zabbix_api_url: "http://172.29.57.115/zabbix/api_jsonrpc.php"
     zabbix_user: "Admin"
     zabbix_password: "zabbix"
     host_name: "{{ Hostname }}"
-    maintenance_name: "{{ Maintenance_Name + (ansible_date_time.epoch | int) }}"
+    maintenance_name: "{{ Maintenance_Name + (ansible_date_time.epoch) }}"
     maintenance_description: "{{ Reason_Justification }}"
-    maintenance_time_start: "{{ (Active_Since | int) + 60 }}"
-    maintenance_duration: "{{ Period }}"
+    maintenance_time_start: "{{ (Active_Since | int) + 60 }}"  # Start time, 60 seconds from now
+    maintenance_duration: "{{ Period }}"  # Duration in seconds
 
   tasks:
+    - name: Print variables for debugging
+      debug:
+        msg:
+          hostname: "{{ host_name }}"
+          maintenance_name: "{{ maintenance_name }}"
+          maintenance_description: "{{ maintenance_description }}"
+          maintenance_time_start: "{{ maintenance_time_start }}"
+          maintenance_duration: "{{ maintenance_duration }}"
+
     - name: Get Zabbix auth token
       uri:
         url: "{{ zabbix_api_url }}"
@@ -43,7 +52,7 @@
         msg: "Failed to get Zabbix auth token."
       when: zabbix_auth_token == ''
 
-    - name: Get all hosts
+    - name: Get host ID by host name
       uri:
         url: "{{ zabbix_api_url }}"
         method: POST
@@ -54,25 +63,25 @@
           jsonrpc: "2.0"
           method: "host.get"
           params:
-            output: ["hostid", "name"]
+            output: ["hostid"]
+            filter:
+              name: ["{{ host_name }}"]
           auth: "{{ zabbix_auth_token }}"
           id: 2
         return_content: yes
-      register: all_hosts_response
+      register: host_response
 
-    - name: Debug all hosts response
+    - name: Debug host response
       debug:
-        var: all_hosts_response
+        var: host_response
 
-    - name: Filter host by name case-insensitively
+    - name: Set host ID
       set_fact:
-        host_id: "{{ query_result | default('') }}"
-      vars:
-        query_result: "{{ all_hosts_response.json.result | selectattr('name', 'search', host_name) | list | first }}"
+        host_id: "{{ host_response.json.result[0].hostid | default('') }}"
 
-    - name: Fail if host ID is not found
+    - name: Fail if host ID is not set
       fail:
-        msg: "Failed to find host ID for '{{ host_name }}'."
+        msg: "Failed to get host ID."
       when: host_id == ''
 
     - name: Create maintenance window
