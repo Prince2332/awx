@@ -1,7 +1,7 @@
 - name: Create a maintenance window for a Zabbix host
   hosts: localhost
   connection: local
-  gather_facts: true  # Ensure facts are gathered
+  gather_facts: true
   vars:
     zabbix_api_url: "http://172.29.57.115/zabbix/api_jsonrpc.php"
     zabbix_user: "Admin"
