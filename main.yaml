@@ -13,15 +13,6 @@
     maintenance_duration: "{{ Period }}"  # Duration in seconds
 
   tasks:
-    - name: Print variables for debugging
-      debug:
-        msg:
-          hostname: "{{ host_name }}"
-          maintenance_name: "{{ maintenance_name }}"
-          maintenance_description: "{{ maintenance_description }}"
-          maintenance_time_start: "{{ maintenance_time_start }}"
-          maintenance_duration: "{{ maintenance_duration }}"
-
     - name: Get Zabbix auth token
       uri:
         url: "{{ zabbix_api_url }}"
@@ -38,10 +29,6 @@
           id: 1
         return_content: yes
       register: auth_response
-
-    - name: Debug auth response
-      debug:
-        var: auth_response
 
     - name: Set Zabbix auth token
       set_fact:
