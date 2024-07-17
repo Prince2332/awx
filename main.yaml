@@ -29,6 +29,9 @@
           id: 1
         return_content: yes
       register: auth_response
+    - name: Debugging
+      debug:
+        var: auth_response
 
     - name: Set Zabbix auth token
       set_fact:
