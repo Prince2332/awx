@@ -3,7 +3,7 @@
   connection: local
   gather_facts: false
   vars:
-    zabbix_api_url: "https://observability.motherson.com/zabbix/api_jsonrpc.php"
+    zabbix_api_url: "https://observability.motherson.com/api_jsonrpc.php"
     # zabbix_user: ""
     # zabbix_password: ""
     zabbix_auth_token: 0a7528866d27e315eba358748a0c51359e6c89dc7b5dac2b6896738e503463fd
