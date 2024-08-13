@@ -60,6 +60,7 @@
           auth: "{{ zabbix_auth_token }}"
           id: 2
         return_content: yes
+        validate_certs: no
       register: host_response
 
     - name: Debug host response
@@ -99,6 +100,7 @@
           auth: "{{ zabbix_auth_token }}"
           id: 3
         return_content: yes
+        validate_certs: no
       register: maintenance_response
 
     - name: Output maintenance creation response
