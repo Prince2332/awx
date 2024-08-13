@@ -3,9 +3,9 @@
   connection: local
   gather_facts: false
   vars:
-    zabbix_api_url: "http://observability.motherson.com/zabbix/api_jsonrpc.php"
-    zabbix_user: "Admin"
-    zabbix_password: "zabbix"
+    zabbix_api_url: "https://observability.motherson.com/zabbix/api_jsonrpc.php"
+    zabbix_user: "Prine.Santal"
+    zabbix_password: "Sanchez@7592"
     host_name: "{{ Hostname }}"
     maintenance_name: "{{ Maintenance_Name ~ ' ' ~ (Active_Since) }}"
     maintenance_description: "{{ Reason_Justification }}"
