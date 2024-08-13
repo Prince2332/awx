@@ -4,8 +4,9 @@
   gather_facts: false
   vars:
     zabbix_api_url: "https://observability.motherson.com/zabbix/api_jsonrpc.php"
-    zabbix_user: "Prine.Santal"
-    zabbix_password: "Sanchez@7592"
+    # zabbix_user: ""
+    # zabbix_password: ""
+    zabbix_auth_token: 0a7528866d27e315eba358748a0c51359e6c89dc7b5dac2b6896738e503463fd
     host_name: "{{ Hostname }}"
     maintenance_name: "{{ Maintenance_Name ~ ' ' ~ (Active_Since) }}"
     maintenance_description: "{{ Reason_Justification }}"
@@ -13,34 +14,34 @@
     maintenance_duration: "{{ Period }}"  # Duration in seconds
 
   tasks:
-    - name: Get Zabbix auth token
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-        body:
-          jsonrpc: "2.0"
-          method: "user.login"
-          params:
-            username: "{{ zabbix_user }}"
-            password: "{{ zabbix_password }}"
-          id: 1
-        return_content: yes
-      register: auth_response
-    - name: Debugging
-      debug:
-        var: auth_response
+    # - name: Get Zabbix auth token
+    #   uri:
+    #     url: "{{ zabbix_api_url }}"
+    #     method: POST
+    #     body_format: json
+    #     headers:
+    #       Content-Type: "application/json"
+    #     body:
+    #       jsonrpc: "2.0"
+    #       method: "user.login"
+    #       params:
+    #         username: "{{ zabbix_user }}"
+    #         password: "{{ zabbix_password }}"
+    #       id: 1
+    #     return_content: yes
+    #   register: auth_response
+    # - name: Debugging
+    #   debug:
+    #     var: auth_response
 
-    - name: Set Zabbix auth token
-      set_fact:
-        zabbix_auth_token: "{{ auth_response.json.result | default('') }}"
+    # - name: Set Zabbix auth token
+    #   set_fact:
+    #     zabbix_auth_token: "{{ auth_response.json.result | default('') }}"
 
-    - name: Fail if auth token is not set
-      fail:
-        msg: "Failed to get Zabbix auth token."
-      when: zabbix_auth_token == ''
+    # - name: Fail if auth token is not set
+    #   fail:
+    #     msg: "Failed to get Zabbix auth token."
+    #   when: zabbix_auth_token == ''
 
     - name: Get host ID by host name
       uri:
