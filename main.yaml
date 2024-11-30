@@ -94,7 +94,7 @@
             hostids:
               - "{{ host_id }}"
             timeperiods:
-              - timeperiod_type: 0  # one-time maintenance
+              - timeperiod_type: 0  # one-time  maintenance 
                 start_date: "{{ maintenance_time_start | int }}"
                 period: "{{ maintenance_duration | int }}"
           auth: "{{ zabbix_auth_token }}"
