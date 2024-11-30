@@ -1,0 +1,12 @@
+- name: Take vm snapshot 
+  host: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    vm_name: "{{vm_name}}"
+    date: "{{date_time}}"
+  
+  tasks:
+    - name: printing 
+      debug:
+        var: vm_name
