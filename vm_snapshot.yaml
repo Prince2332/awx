@@ -1,11 +1,11 @@
-- name: Take vm snapshot 
-  host: localhost
+- name: Take vm snapshot
+  hosts: localhost  # use 'hosts' instead of 'host'
   connection: local
   gather_facts: false
   vars:
-    vm_name: "{{vm_name}}"
-    date: "{{date_time}}"
-  
+    vm_name: "{{ vm_name }}"
+    date: "{{ date_time }}"
+
   tasks:
     - name: printing 
       debug:
