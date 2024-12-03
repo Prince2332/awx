@@ -9,7 +9,7 @@
   tasks:
     - name: Debug VM name
       debug:
-        var: vm_name  # This will print the value of vm_name
+        var: vm name  # This will print the value of vm_name
 
     - name: Debug Date
       debug:
