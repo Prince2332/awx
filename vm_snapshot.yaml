@@ -3,7 +3,7 @@
   connection: local  # Ensures the playbook runs locally
   gather_facts: false  # Skip fact gathering for faster execution
   vars:
-    vm_name: "{{ vm_name }}"  # Ensure vm_name is passed in as an extra_var
+    vm name: "{{ vm_name }}"  # Ensure vm_name is passed in as an extra_var
     date: "{{ date_time }}"  # Ensure date_time is passed in as an extra_var
 
   tasks:
