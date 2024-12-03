@@ -1,16 +1,16 @@
 - name: Take VM snapshot
-  hosts: localhost  # This refers to the local machine where the playbook is executed
-  connection: local  # Ensures the playbook runs locally
-  gather_facts: false  # Skip fact gathering for faster execution
+  hosts: localhost
+  connection: local
+  gather_facts: false
   vars:
-    vm: "{{ VM }}"  # Ensure vm_name is passed in as an extra_var
-    date: "{{ Date }}"  # Ensure date_time is passed in as an extra_var
+    vm_name: "{{ vm }}"  # Map `vm` from payload to `vm_name` variable (if needed)
+    snapshot_date: "{{ date }}"  # Map `date` from payload to `snapshot_date` variable (if needed)
 
   tasks:
     - name: Debug VM name
       debug:
-        var: vm  # This will print the value of vm_name
+        msg: "VM Name is: {{ vm }}"  # Use the `vm` variable directly
 
     - name: Debug Date
       debug:
-        var: date  # This will print the value of date_time (or the date variable)
+        msg: "Snapshot Date is: {{ date }}"  # Use the `date` variable directly
