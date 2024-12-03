@@ -3,14 +3,14 @@
   connection: local  # Ensures the playbook runs locally
   gather_facts: false  # Skip fact gathering for faster execution
   vars:
-    vm name: "{{ vm_name }}"  # Ensure vm_name is passed in as an extra_var
-    date: "{{ date_time }}"  # Ensure date_time is passed in as an extra_var
+    vm: "{{ vm_name }}"  # Ensure vm_name is passed in as an extra_var
+    # date: "{{ date_time }}"  # Ensure date_time is passed in as an extra_var
 
   tasks:
     - name: Debug VM name
       debug:
-        var: vm name  # This will print the value of vm_name
+        var: vm  # This will print the value of vm_name
 
-    - name: Debug Date
-      debug:
-        var: date  # This will print the value of date_time (or the date variable)
+    # - name: Debug Date
+    #   debug:
+    #     var: date  # This will print the value of date_time (or the date variable)
