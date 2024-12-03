@@ -9,8 +9,8 @@
   tasks:
     - name: Debug VM name
       debug:
-        msg: "VM Name is: {{ vm }}"  # Use the `vm` variable directly
+        msg: "VM Name is: {{ vm_name }}"  # Use the `vm` variable directly
 
     - name: Debug Date
       debug:
-        msg: "Snapshot Date is: {{ date }}"  # Use the `date` variable directly
+        msg: "Snapshot Date is: {{ snapshot_date }}"  # Use the `date` variable directly
